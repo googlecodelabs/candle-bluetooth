@@ -1,10 +1,39 @@
-document.querySelector('#connect').addEventListener('click', function(event) {
-  /* Clicking this button will attempt to connect to the PLAYBULB Candle and
-   * read some values such as Device Name and Battery Level. */
+document.querySelector('#connect').addEventListener('click', event => {
+  playbulbCandle.connect()
+  .then(() => {
+    console.log(playbulbCandle.device);
+    document.querySelector('#state').classList.add('connected');
+    return Promise.all([
+      playbulbCandle.getDeviceName().then(handleDeviceName),
+      playbulbCandle.getBatteryLevel().then(handleBatteryLevel),
+    ]);
+  })
+  .catch(error => {
+    console.error('Argh!', error);
+  });
 });
 
+function handleDeviceName(deviceName) {
+  document.querySelector('#deviceName').value = deviceName;
+}
+
+function handleBatteryLevel(batteryLevel) {
+  document.querySelector('#batteryLevel').textContent = batteryLevel + '%';
+}
+
 function changeColor() {
-  /* This function is called when user clicks on an effect radio button. */
+  var effect = document.querySelector('[name="effectSwitch"]:checked').id;
+  switch(effect) {
+    case 'noEffect':
+      playbulbCandle.setColor(r, g, b).then(onColorChanged);
+      break;
+    case 'candleEffect':
+      playbulbCandle.setCandleEffectColor(r, g, b).then(onColorChanged);
+      break;
+    case 'flashing':
+      playbulbCandle.setFlashingColor(r, g, b).then(onColorChanged);
+      break;
+  }
 }
 
 var r = g = b = 255;
