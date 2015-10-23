@@ -33,8 +33,27 @@ function changeColor() {
     case 'flashing':
       playbulbCandle.setFlashingColor(r, g, b).then(onColorChanged);
       break;
+    case 'pulse':
+      playbulbCandle.setPulseColor(r, g, b).then(onColorChanged);
+      break;
+    case 'rainbow':
+      playbulbCandle.setRainbow().then(onColorChanged);
+      break;
+    case 'rainbowFade':
+      playbulbCandle.setRainbowFade().then(onColorChanged);
+      break;
   }
 }
+
+document.querySelector('#deviceName').addEventListener('input', event => {
+  playbulbCandle.setDeviceName(event.target.value)
+  .then(() => {
+    console.log('Device name changed to ' + event.target.value);
+  })
+  .catch(error => {
+    console.error('Argh!', error);
+  });
+});
 
 var r = g = b = 255;
 
