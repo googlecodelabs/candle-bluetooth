@@ -75,9 +75,14 @@ img.onload = function() {
   canvas.style.width = "300px";
   canvas.style.height = "300px";
   canvas.addEventListener('click', function(evt) {
+    // Refresh canvas in case user zooms and devicePixelRatio changes.
+    canvas.width = 300 * devicePixelRatio;
+    canvas.height = 300 * devicePixelRatio;
+    context.drawImage(img, 0, 0, canvas.width, canvas.height);
+
     var rect = canvas.getBoundingClientRect();
-    var x = (evt.clientX - rect.left) * devicePixelRatio;
-    var y = (evt.clientY - rect.top) * devicePixelRatio;
+    var x = Math.round((evt.clientX - rect.left) * devicePixelRatio);
+    var y = Math.round((evt.clientY - rect.top) * devicePixelRatio);
     var data = context.getImageData(0, 0, canvas.width, canvas.height).data;
 
     r = data[((canvas.width * y) + x) * 4];
