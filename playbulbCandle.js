@@ -17,7 +17,8 @@
       this._characteristics = new Map();
     }
     connect() {
-      let options = {filters:[{services:[ CANDLE_SERVICE_UUID ]}]};
+      let options = {filters:[{services:[ CANDLE_SERVICE_UUID ]}],
+                     optionalServices: ['battery_service']};
       return navigator.bluetooth.requestDevice(options)
       .then(device => {
         this.device = device;
